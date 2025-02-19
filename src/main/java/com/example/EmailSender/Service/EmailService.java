@@ -1,6 +1,7 @@
 package com.example.EmailSender.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
+    @Value("${spring.mail.username}")
+    private String email;
 
     public void sendEmail(String name, String email, String subject, String message) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -32,18 +35,18 @@ public class EmailService {
     }
 
     // Envoi d'un email automatique de confirmation
-    public void sendConfirmationEmail(String to) throws MessagingException {
+    public void sendConfirmationEmail(String to, String userName) throws MessagingException {
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-        helper.setFrom("lahnin.010@gmail.com");
+        helper.setFrom(email);
         helper.setTo(to);
         helper.setSubject("Confirmation de réception de votre message");
-        helper.setText("<p>Bonjour,</p>" +
+        helper.setText("<p>Bonjour <strong>" + userName + "</strong>,</p>" +
                 "<p>Nous avons bien reçu votre message et nous vous répondrons dès que possible.</p>" +
                 "<p>Merci de nous avoir contactés !</p>" +
-                "<p>Cordialement,<br>Mohamed Belfaquih</p>", true);
+                "<p>Cordialement,<br><b>Mohamed Belfaquih</b></p>", true);
 
         mailSender.send(mimeMessage);
     }

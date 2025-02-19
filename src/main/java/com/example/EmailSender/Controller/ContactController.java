@@ -29,7 +29,7 @@ public class ContactController {
             emailService.sendEmail(name, email, subject, message);
 
             // Envoi de l'email de confirmation à l'utilisateur
-            emailService.sendConfirmationEmail(email);
+            emailService.sendConfirmationEmail(email, name);
             return "Votre message a été envoyé avec succès.";
         } catch (MessagingException e) {
             return "Erreur lors de l'envoi du message: " + e.getMessage();
