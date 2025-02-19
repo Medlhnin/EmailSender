@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EmailSenderApplication {
 
 	public static void main(String[] args) {
+		System.out.println(System.getenv("SPRING_MAIL_PASSWORD"));
+		System.out.println(System.getenv("SPRING_MAIL_USERNAME"));
 		SpringApplication.run(EmailSenderApplication.class, args);
 	}
 
