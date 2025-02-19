@@ -1,0 +1,50 @@
+package com.example.EmailSender.Service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+
+@Service
+public class EmailService {
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    public void sendEmail(String name, String email, String subject, String message) throws MessagingException {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+        helper.setFrom(email);
+        helper.setTo("lahnin.010@gmail.com");
+        helper.setSubject(subject);
+
+        String htmlMsg = "<p><strong>Nom :</strong> " + name + "</p>" +
+                "<p><strong>Email :</strong> " + email + "</p>" +
+                "<p><strong>Message :</strong><br>" + message + "</p>";
+
+        helper.setText(htmlMsg, true);
+
+        mailSender.send(mimeMessage);
+    }
+
+    // Envoi d'un email automatique de confirmation
+    public void sendConfirmationEmail(String to) throws MessagingException {
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+        helper.setFrom("lahnin.010@gmail.com");
+        helper.setTo(to);
+        helper.setSubject("Confirmation de réception de votre message");
+        helper.setText("<p>Bonjour,</p>" +
+                "<p>Nous avons bien reçu votre message et nous vous répondrons dès que possible.</p>" +
+                "<p>Merci de nous avoir contactés !</p>" +
+                "<p>Cordialement,<br>Mohamed Belfaquih</p>", true);
+
+        mailSender.send(mimeMessage);
+    }
+}
