@@ -34,8 +34,9 @@ public class EmailService {
         mailSender.send(mimeMessage);
     }
 
+
     // Envoi d'un email automatique de confirmation
-    public void sendConfirmationEmail(String to, String userName) throws MessagingException {
+    public void sendConfirmationEmail(String to, String userName, String response) throws MessagingException {
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
@@ -43,10 +44,7 @@ public class EmailService {
         helper.setFrom(email);
         helper.setTo(to);
         helper.setSubject("Confirmation de réception de votre message");
-        helper.setText("<p>Bonjour <strong>" + userName + "</strong>,</p>" +
-                "<p>Nous avons bien reçu votre message et nous vous répondrons dès que possible.</p>" +
-                "<p>Merci de nous avoir contactés !</p>" +
-                "<p>Cordialement,<br><b>Mohamed Belfaquih</b></p>", true);
+        helper.setText("<p>Bonjour <strong>" + userName + "</strong>,</p>" + response, true);
 
         mailSender.send(mimeMessage);
     }

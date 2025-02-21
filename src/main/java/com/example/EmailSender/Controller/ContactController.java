@@ -1,6 +1,7 @@
 package com.example.EmailSender.Controller;
 
 import com.example.EmailSender.Service.EmailService;
+import com.example.EmailSender.Service.OpenAIService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import java.util.Map;
 @RequestMapping("/api/contact")
 @CrossOrigin("*")
 public class ContactController {
+    @Autowired
+    private OpenAIService openAIService;
     @Autowired
     private EmailService emailService;
 
@@ -27,9 +30,10 @@ public class ContactController {
             }
 
             emailService.sendEmail(name, email, subject, message);
+            String response = openAIService.generateText(message);
 
             // Envoi de l'email de confirmation à l'utilisateur
-            emailService.sendConfirmationEmail(email, name);
+            emailService.sendConfirmationEmail(email, name, response);
             return "Votre message a été envoyé avec succès.";
         } catch (MessagingException e) {
             return "Erreur lors de l'envoi du message: " + e.getMessage();
